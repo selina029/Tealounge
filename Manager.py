@@ -1742,7 +1742,7 @@ def callback():
 
                             # 生成 user_id 的哈希
                             user_id_hash = hashlib.sha256(user_id.encode()).hexdigest()
-                            reply_text = f"您尚未完成註冊，請點擊以下鏈接進行註冊：\n[註冊鏈接](https://https://tealounge-3pzg.onrender.com/register?user_id={user_id_hash})"
+                            reply_text = f"您尚未完成註冊，請點擊以下鏈接進行註冊：\n[註冊鏈接](https://tealounge-3pzg.onrender.com/register?user_id={user_id_hash})"
                             line_bot_api.reply_message(
                                 event.reply_token,
                                 TextSendMessage(text=reply_text)
