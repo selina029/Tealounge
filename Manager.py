@@ -85,9 +85,9 @@ login_manager.login_view = 'login'
 mail = Mail(app)
 
 
-line_bot_api = LineBotApi('x2mgOSA7iK5gNuCppnvGlw817L2Xvy8G4X8qPG7VktisUbJuzb21k/rOU2KXcp0gQI6oNZdKDQs09/emGn30eC1vRLWkomwsKEuOLA38eVEa1LALHrf8bWz/7dXAEuzS6JHfuc3AvskwPmab+I0gfwdB04t89/1O/w1cDnyilFU=')  
-handler = WebhookHandler('7212f26dd1e65d5b598795969ba458bb')
-parser = WebhookParser('7212f26dd1e65d5b598795969ba458bb')  # 初始化 parser
+line_bot_api = LineBotApi('b+Bb2VJlaihO1wxMHiA7rd65oSoiPnWGxN5BjbDxDg0tuyWuYhqt40I+BoZwwzhatNEN51JV+nZZMtU2f9CosITrmHQlkFsKAnKG6pO3rCA3SW+HC6uxSxJH+NZiQyj2eTl+asA2/6IhFVAmUg/OcAdB04t89/1O/w1cDnyilFU=')  
+handler = WebhookHandler('fe4f92453ffda5592e6a2b4151fb7859')
+parser = WebhookParser('fe4f92453ffda5592e6a2b4151fb7859')  # 初始化 parser
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 Session = sessionmaker(bind=engine)
@@ -1513,20 +1513,20 @@ def order():
     try:
         # 獲取當前用戶的會員編號
         user_member_id = current_user.id
-        
-        # 根據會員編號過濾訂單，只顯示該用戶的訂單
-        orders = Orders.query.filter_by(MemberID=user_member_id).all()
+       
+        # 根據會員編號過濾訂單，並按送出時間排序
+        orders = Orders.query.filter_by(MemberID=user_member_id).order_by(Orders.OrderDate.desc()).all()
 
         # 為每個訂單生成哈希值
         for order in orders:
             order.hash = hash_order_id(order.OrderID)
-        
+       
         print(f"Orders for user {user_member_id}: {orders}")  # 打印當前用戶的訂單資料
         return render_template('order.html', orders=orders)
     except Exception as e:
         print(f"Error retrieving orders for user {current_user.id}: {e}")
         return "An error occurred while retrieving orders.", 500
-
+    
 @app.route('/order_detail/<string:hashed_order_id>')
 @login_required
 def order_detail(hashed_order_id):
@@ -1742,7 +1742,7 @@ def callback():
 
                             # 生成 user_id 的哈希
                             user_id_hash = hashlib.sha256(user_id.encode()).hexdigest()
-                            reply_text = f"您尚未完成註冊，請點擊以下鏈接進行註冊：\n[註冊鏈接](https://你的網站地址/register?user_id={user_id_hash})"
+                            reply_text = f"您尚未完成註冊，請點擊以下鏈接進行註冊：\n[註冊鏈接](https://https://tealounge-3pzg.onrender.com/register?user_id={user_id_hash})"
                             line_bot_api.reply_message(
                                 event.reply_token,
                                 TextSendMessage(text=reply_text)
