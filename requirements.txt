@@ -10,3 +10,4 @@ WTForms
 SQLAlchemy
 flask_wtf
 psycopg2
+email-validator
