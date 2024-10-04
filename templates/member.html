@@ -589,16 +589,19 @@
                 // 密碼正則表達式驗證：至少 8 個字符，必須包含字母和數字
                 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
         
-                // 驗證新密碼是否符合要求
-                if (!newPassword.match(passwordRegex)) {
-                    showModal('新密碼必須至少包含 8 個字符，並且包含字母和數字。');
-                    return false; // 驗證失敗
-                }
+                // 檢查是否有填寫新密碼或確認密碼，如果有則進行驗證
+                if (newPassword || confirmPassword) {
+                    // 驗證新密碼是否符合要求
+                    if (newPassword && !newPassword.match(passwordRegex)) {
+                        showModal('新密碼必須至少包含 8 個字符，並且包含字母和數字。');
+                        return false; // 驗證失敗
+                    }
         
-                // 驗證新密碼與確認密碼是否一致
-                if (newPassword !== confirmPassword) {
-                    showModal('新密碼與確認密碼不一致，請重新輸入。');
-                    return false; // 驗證失敗
+                    // 驗證新密碼與確認密碼是否一致
+                    if (newPassword !== confirmPassword) {
+                        showModal('新密碼與確認密碼不一致，請重新輸入。');
+                        return false; // 驗證失敗
+                    }
                 }
         
                 // 驗證通過
@@ -661,6 +664,7 @@
                 };
             }
         });
+
 
 
 
