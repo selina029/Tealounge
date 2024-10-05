@@ -369,6 +369,32 @@
         width: 100%;
         margin: 0;
     }
+    /* RWD - 手機版設定 */
+    @media screen and (max-width: 768px) {
+        #top_table_info {
+            grid-template-columns: 1fr; /* 改為單列顯示 */
+            row-gap: 10px; /* 調整垂直間距 */
+        }
+    
+        #top_table_info .logout-btn {
+            padding: 6px 12px; /* 調整按鈕大小 */
+        }
+    
+        #top_table_info #search .content {
+            width: 100%; /* 調整為全寬 */
+        }
+    
+        #top_table_info input,
+        #top_table_info select,
+        #top_table_info button {
+            height: 36px; /* 縮小高度 */
+            font-size: 0.9rem; /* 縮小字體 */
+        }
+    
+        #top_table_info .controller_container {
+            justify-content: center; /* 手機版居中顯示 */
+        }
+    }
     .classic_btn a {
         background-color: #3974a5;
         word-break: keep-all;
