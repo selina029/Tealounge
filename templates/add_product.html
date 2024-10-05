@@ -441,8 +441,20 @@
     </div>
     <script src="https://unpkg.com/cropperjs@1.6.5/dist/cropper.min.js"></script>
     <script>
-        document.querySelector('.openbtn').addEventListener('click', function() {
-            document.getElementById('_main_menu').classList.toggle('active');
+        document.querySelector(".openbtn").addEventListener("click", function () {
+          var menu = document.getElementById("_main_menu");
+          menu.classList.toggle("active");
+        });
+    
+        // 點擊側邊欄以外的區域將側邊欄隱藏
+        document.addEventListener("click", function (event) {
+          var menu = document.getElementById("_main_menu");
+          var openBtn = document.querySelector(".openbtn");
+    
+          // 如果點擊的不是側邊欄或者三條線按鈕，隱藏側邊欄
+          if (!menu.contains(event.target) && !openBtn.contains(event.target)) {
+            menu.classList.remove("active");
+          }
         });
         
         function showDialog(message) {
