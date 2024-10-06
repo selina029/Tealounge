@@ -568,7 +568,35 @@
     .dialog p {
         margin-bottom: 20px; /* 設定段落和按鈕之間的間距 */
     }
-
+        /* 當視窗寬度小於 1024px 時改為垂直排列 */
+        @media screen and (max-width: 1024px) {
+            .flex {
+                flex-direction: column;
+            }
+        
+            /* 調整內容區域的寬度 */
+            ._left, ._right {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        
+            /* 商品圖片與資訊也變成垂直排列 */
+            .product-box {
+                flex-direction: column;
+            }
+        
+            .product-image {
+                margin-bottom: 10px;
+            }
+            .content_box .title {
+                display: block; /* 讓標題和下拉選單垂直排列 */
+            }
+        
+            .content_box .title select {
+                margin-top: 10px; /* 增加下拉選單與標題之間的距離 */
+                width: 100%; /* 讓下拉選單寬度佔滿父容器 */
+            }
+        }       
   </style>
 </head>
 <body>
