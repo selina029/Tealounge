@@ -504,14 +504,14 @@ def orders():
             search_value = data.get('value')
 
             if search_target and search_value:
-                # 根據搜尋條件查詢訂單
-                all_orders = search_orders(search_target, search_value)
+                # 根據搜尋條件查詢訂單，並按 OrderID 降序排列
+                all_orders = search_orders(search_target, search_value).order_by(Orders.OrderID.desc())
             else:
-                # 如果沒有搜尋條件，顯示所有訂單
-                all_orders = Orders.query.all()
+                # 如果沒有搜尋條件，顯示所有訂單，並按 OrderID 降序排列
+                all_orders = Orders.query.order_by(Orders.OrderID.desc()).all()
         else:
-            # GET 請求時顯示所有訂單
-            all_orders = Orders.query.all()
+            # GET 請求時顯示所有訂單，並按 OrderID 降序排列
+            all_orders = Orders.query.order_by(Orders.OrderID.desc()).all()
 
         # 為每個訂單生成哈希值
         for order in all_orders:
@@ -522,6 +522,7 @@ def orders():
     except Exception as e:
         print(f"Error retrieving or searching orders: {e}")
         return "An error occurred while retrieving orders.", 500
+
 
 
 @app.route('/search_orders', methods=['POST'])
