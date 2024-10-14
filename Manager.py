@@ -1715,7 +1715,7 @@ def callback():
                 user_id = event.source.user_id  # 獲取用戶的 user_id
                 user_message = event.message.text.strip()
 
-                if user_message == '@品牌介紹':
+                if user_message == '@關於我們':
                     brand_description = """\
             Tea Lounge 時尚品茶餐飲
                 
@@ -1736,7 +1736,7 @@ https://www.instagram.com/food.is.shiny?igsh=am1iNHNqdm96aXY2
                     )
 
                 # 當用戶輸入 @會員 時
-                elif user_message == '@會員':
+                elif user_message == '@加入會員':
                     # 檢查用戶是否已經存在於資料庫中
                     existing_user = LineUser.query.filter_by(user_id=user_id).first()
 
@@ -1764,7 +1764,7 @@ https://www.instagram.com/food.is.shiny?igsh=am1iNHNqdm96aXY2
                             TextSendMessage(text=reply_text)
                         )
 
-                elif user_message == '@我想查詢訂單狀態':
+                elif user_message == '@查詢訂單':
                     line_user = LineUser.query.filter_by(user_id=user_id).first()
 
                     if line_user:
