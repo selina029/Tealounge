@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import os
 import secrets
 import requests
+import base64
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify, flash, abort, current_app
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -30,6 +31,9 @@ from werkzeug.exceptions import BadRequest, Forbidden
 from sqlalchemy.exc import SQLAlchemyError
 import hashlib, re
 from hashlib import sha256
+
+
+
 
 # 訂單狀態代碼
 ORDER_STATUS_PENDING = 1  # 待確定
@@ -62,7 +66,7 @@ load_dotenv()
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:3Qr01lSaRd3NQSBjnkT0bk6CzuXkE2tO@dpg-crmn1oi3esus73807ej0-a.singapore-postgres.render.com/tealounge'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = 'static/uploads/'  # 上傳檔案的目錄
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # 使用 Gmail 的 SMTP 伺服器
@@ -71,6 +75,7 @@ app.config['MAIL_USE_TLS'] = True  # Gmail 支持 TLS 加密
 app.config['MAIL_USERNAME'] = 'tealoungebarnew@gmail.com'  # 你的 Gmail 帳號
 app.config['MAIL_PASSWORD'] = 'exmi itpa uoeq kcut'  # 你的 Gmail 密碼
 app.config['MAIL_DEFAULT_SENDER'] = 'noreply@gmail.com'  # 默認的發件人地址
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'a_random_string_that_is_hard_to_guess')  # 設定 secret_key
 
 # LINE OAuth2 設定
 LINE_CHANNEL_ID = 'YOUR_CHANNEL_ID'
@@ -285,6 +290,32 @@ class LoginForm(FlaskForm):
 def login_redirect():
     return redirect(url_for('manager_login'))
 
+
+
+# 上傳圖片到 GitHub
+def upload_image_to_github(repo_owner, repo_name, file, commit_message, github_token):
+    filename = secure_filename(file.filename)
+    file_path = f"Tealounge/static/uploads/{filename}"
+
+    # 將檔案內容編碼為 Base64
+    encoded_image = base64.b64encode(file.read()).decode('utf-8')
+
+    api_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{file_path}"
+
+    payload = {
+        "message": commit_message,
+        "content": encoded_image
+    }
+
+    headers = {
+        "Authorization": f"token {github_token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    response = requests.put(api_url, json=payload, headers=headers)
+
+    return response.status_code == 201
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
@@ -298,17 +329,25 @@ def upload_file():
         return redirect(request.url)
     
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        flash('檔案上傳成功', 'success')
-        return redirect(url_for('uploaded_file', filename=filename))
+        # 上傳檔案到 GitHub
+        github_upload_success = upload_image_to_github(
+            repo_owner="selina029",               # 替換為你的 GitHub 用戶名
+            repo_name="Tealounge",                      # 替換為你的儲存庫名稱
+            file=file,
+            commit_message=f"Upload {file.filename} to Tealounge static folder",
+            github_token="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"  # 替換為你的 GitHub 個人存取令牌
+        )
+        
+        if github_upload_success:
+            flash('檔案成功上傳到 GitHub', 'success')
+            return redirect(url_for('uploaded_file', filename=file.filename))
+        else:
+            flash('檔案上傳到 GitHub 失敗', 'error')
+            return redirect(request.url)
     
     flash('檔案格式不允許', 'error')
     return redirect(request.url)
 
-@app.route('/uploaded/<filename>')
-def uploaded_file(filename):
-    return redirect(url_for('static', filename=f'uploads/{filename}'))
 
 @app.route('/manager_login', methods=['GET', 'POST'])
 def manager_login():
@@ -843,21 +882,30 @@ def upload_image(product_id):
         return redirect(url_for('product_edit', product_id=product_id))
     
     try:
-        filename = secure_filename(image.filename)
-        image_path = os.path.join('static/uploads/', filename)
-        image.save(image_path)
+        # 上傳檔案到 GitHub
+        github_upload_success = upload_image_to_github(
+            repo_owner="selina029",               # 替換為你的 GitHub 用戶名
+            repo_name="Tealounge",                      # 替換為你的儲存庫名稱
+            file=image,
+            commit_message=f"Upload image for product {product_id}",
+            github_token="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"  # 替換為你的 GitHub 個人存取令牌
+        )
         
-        # 創建新的圖片記錄
-        new_image = ProductImage(ProductID=product.ProductID, ImagePath=filename)
-        db.session.add(new_image)
-        db.session.commit()
-        
-        flash('圖片上傳成功', 'success')
+        if github_upload_success:
+            # 創建新的圖片記錄，存儲 GitHub 上的圖片路徑
+            image_filename = secure_filename(image.filename)
+            new_image = ProductImage(ProductID=product.ProductID, ImagePath=image_filename)  # 假設 ImagePath 存的是文件名
+            db.session.add(new_image)
+            db.session.commit()
+            flash('圖片上傳成功', 'success')
+        else:
+            flash('上傳圖片到 GitHub 失敗', 'error')
     except Exception as e:
         db.session.rollback()
         flash(f'上傳圖片時發生錯誤: {str(e)}', 'error')
     
     return redirect(url_for('product_edit', product_id=product_id))
+
 
 @app.route('/products/toggle_status/<int:product_id>', methods=['POST'])
 def toggle_status(product_id):
@@ -918,6 +966,10 @@ def manager_logout():
 @app.route('/')
 def index():
     return redirect(url_for('home'))
+
+@app.route('/add_register')
+def add_register():
+    return render_template('register.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -1237,6 +1289,7 @@ def about():
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
 
 @app.route('/home')
 def home():
