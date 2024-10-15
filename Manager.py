@@ -90,9 +90,9 @@ login_manager.login_view = 'login'
 mail = Mail(app)
 
 
-line_bot_api = LineBotApi('b+Bb2VJlaihO1wxMHiA7rd65oSoiPnWGxN5BjbDxDg0tuyWuYhqt40I+BoZwwzhatNEN51JV+nZZMtU2f9CosITrmHQlkFsKAnKG6pO3rCA3SW+HC6uxSxJH+NZiQyj2eTl+asA2/6IhFVAmUg/OcAdB04t89/1O/w1cDnyilFU=')  
-handler = WebhookHandler('fe4f92453ffda5592e6a2b4151fb7859')
-parser = WebhookParser('fe4f92453ffda5592e6a2b4151fb7859')  # 初始化 parser
+line_bot_api = LineBotApi('x2mgOSA7iK5gNuCppnvGlw817L2Xvy8G4X8qPG7VktisUbJuzb21k/rOU2KXcp0gQI6oNZdKDQs09/emGn30eC1vRLWkomwsKEuOLA38eVEa1LALHrf8bWz/7dXAEuzS6JHfuc3AvskwPmab+I0gfwdB04t89/1O/w1cDnyilFU=')  
+handler = WebhookHandler('7212f26dd1e65d5b598795969ba458bb')
+parser = WebhookParser('7212f26dd1e65d5b598795969ba458bb')  # 初始化 parser
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 Session = sessionmaker(bind=engine)
