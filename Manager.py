@@ -89,7 +89,7 @@ login_manager.login_view = 'login'
 mail = Mail(app)
 
 
-line_bot_api = LineBotApi('x2mgOSA7iK5gNuCppnvGlw817L2Xvy8G4X8qPG7VktisUbJuzb21k/rOU2KXcp0gQI6oNZdKDQs09/emGn30eC1vRLWkomwsKEuOLA38eVEa1LALHrf8bWz/7dXAEuzS6JHfuc3AvskwPmab+I0gfwdB04t89/1O/w1cDnyilFU=')  
+line_bot_api = LineBotApi('H0w3AhYjt6ddSSTd4U5tkUGw9+PZLWjgtfFO2MkKOPEBLqXkcXbznehoZpCKrvJwtNEN51JV+nZZMtU2f9CosITrmHQlkFsKAnKG6pO3rCDAEv9fhJv1CXG+EIo+Ih1K9fb/KHAAW5spLiwK5qJLKwdB04t89/1O/w1cDnyilFU=')  
 handler = WebhookHandler('7212f26dd1e65d5b598795969ba458bb')
 parser = WebhookParser('7212f26dd1e65d5b598795969ba458bb')  # 初始化 parser
 
