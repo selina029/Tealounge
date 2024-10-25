@@ -229,17 +229,24 @@
         }
 
         /* 新增：隱藏表單區域 */
+        /* 父容器垂直排列 */
+        .delivery-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        /* .delivery-info 區塊水平排列 */
         .delivery-info {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
             padding: 5px 0;
-            margin-top: 20px;
         }
         
         .delivery-info input {
-            margin-bottom: 0;
             margin-right: 10px;
         }
         
@@ -248,7 +255,6 @@
             padding-top: 10px;
             font-weight: bold;
         }
-
         .error {
             color: red;
             font-size: 12px;
