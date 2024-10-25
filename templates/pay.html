@@ -230,14 +230,21 @@
 
         /* 新增：隱藏表單區域 */
         .delivery-info {
-            display: none;
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
             margin-top: 20px;
         }
-
+        
         .delivery-info input {
             margin-bottom: 10px;
         }
-
+        
+        .delivery-info .total {
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            font-weight: bold;
+        }
         .error {
             color: red;
             font-size: 12px;
