@@ -241,23 +241,25 @@
             padding: 20px;
             border-radius: 10px;
         }
-       /* Media query for smaller screens (e.g., tablets) */
+             /* Media query for smaller screens (e.g., tablets) */
         @media (max-width: 768px) {
             .background-text {
                 padding: 15px;
-                transform: translate(-50%, -50%) scale(0.9); /* 縮小整個文字區塊 */
+                transform: translateY(-50%) scale(0.9);
+                font-size: 1em; /* 縮小字體 */
             }
         }
-        
-        /* Media query for very small screens (e.g., smartphones) */
         @media (max-width: 480px) {
             .background-text {
-                padding: 10px;
-                transform: translate(-50%, -50%) scale(0.8); /* 進一步縮小文字區塊 */
-                border-radius: 5px; /* 縮小邊框圓角 */
+                padding: 2px 0; /* 進一步縮小上下邊距 */
+                width: 100%; /* 讓文字區塊與圖片同寬 */
+                left: 0;
+                transform: translateY(-50%);
+                border-radius: 0; /* 移除圓角，讓文字區塊貼合圖片 */
+                font-size: 0.5em; /* 縮小字體，讓文字區塊更小 */
+                word-wrap: break-word; /* 防止文字超出範圍 */
             }
         }
-
         /* 手機版的樣式 */
         @media (max-width: 768px) {
             .header-container {
