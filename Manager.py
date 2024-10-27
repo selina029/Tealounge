@@ -1771,18 +1771,18 @@ def callback():
                 if user_message == '@關於我們':
                     brand_description = """\
             Tea Lounge 時尚品茶餐飲
-                
+               
 “環保鐵餐盒 · 無麩質飲食 · 私廚料理 · 餐飲規劃設計”
-                
+               
 📌☕️Tea Lounge 風格的品茶空間隆重登場，將優雅與自然完美融合。我們精選國際知名品牌 Dilmah 的頂級茶葉，搭配義大利經典 illy 咖啡，為您帶來無與倫比的品飲饗宴。由一支專業的餐飲團隊用心規劃，我們致力於將這些國際頂尖的咖啡茶品與美味餐食推廣到台灣的每一個角落。
-                
+               
 ✨我們的特色在於無麩質與無麩食飲食，選用天然食材，關注健康飲食，並支持台灣小農的產品。每一口茶飲、每一道餐點，都是我們對品質的堅持與承諾。嚴選的茶葉細心佐以 Dilmah 帝瑪茶，為您帶來一場完美無瑕的雙重饗宴。
-                
+               
 《走進我們的 Tea Lounge，感受茶香馥郁，品味自然健康的生活方式。邀請您一同體驗這個將國際風味與本土特色結合的美妙空間。》
-                
+               
 https://www.instagram.com/food.is.shiny?igsh=am1iNHNqdm96aXY2
                     """
-                
+               
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=brand_description)
