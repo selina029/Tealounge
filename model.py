@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from decimal import Decimal, InvalidOperation
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from sqlalchemy import event
 db = SQLAlchemy()
 
 # 訂單狀態代碼
@@ -30,7 +31,8 @@ DELIVERY_STATUS_CANCELLED = 6  # 已取消
 
 class Manager(db.Model):
     __tablename__ = 'manager'
-    Username = db.Column(db.String(50), primary_key=True)
+    ManagerID = db.Column(db.Integer, primary_key=True, server_default=text("nextval('manager_id_seq')"))
+    Username = db.Column(db.String(50), nullable=False, unique=True)
     _password = db.Column('Password', db.String(200), nullable=False)
 
     @property
@@ -43,6 +45,7 @@ class Manager(db.Model):
 
     def check_password(self, plaintext_password):
         return check_password_hash(self._password, plaintext_password)
+
 
 class Product(db.Model):
     __tablename__ = 'products'
@@ -142,7 +145,7 @@ class Orders(db.Model):
     OrderDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     CustomerName = db.Column(db.String(100), nullable=False)
     Subtotal = db.Column(db.DECIMAL(10, 2), nullable=False)  # 新增小計欄位
-    ShippingFee = db.Column(db.DECIMAL(10, 2), nullable=False, default=50.00)  # 新增運費欄位
+    ShippingFee = db.Column(db.DECIMAL(10, 2), nullable=False)  # 新增運費欄位
     TotalPrice = db.Column(db.DECIMAL(10, 2), nullable=False)
     OrderStatusID = db.Column(db.Integer, nullable=False, default=ORDER_STATUS_PENDING)
     PaymentStatusID = db.Column(db.Integer, nullable=False, default=PAYMENT_STATUS_UNPAID)
@@ -153,6 +156,13 @@ class Orders(db.Model):
 
     member = db.relationship('Register', backref=db.backref('orders', lazy=True))
     
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.calculate_total()
+
+    def calculate_total(self):
+        """計算總額，並設置 TotalPrice 欄位"""
+        self.TotalPrice = self.Subtotal + self.ShippingFee    
         
     @staticmethod
     def get_status_text(status_type, status_value):
@@ -180,7 +190,12 @@ class Orders(db.Model):
         }
         
         return status_texts.get(status_type, {}).get(status_value, '未知狀態')
-
+    
+# 添加觸發器以在插入或更新時自動計算總額
+@event.listens_for(Orders, 'before_insert')
+@event.listens_for(Orders, 'before_update')
+def receive_before_insert(mapper, connection, target):
+    target.calculate_total()
         
 class OrderDetails(db.Model):
     __tablename__ = 'order_details'
@@ -209,19 +224,21 @@ class CartItem(db.Model):
     MemberID = db.Column(db.Integer, db.ForeignKey('register.MemberID'), nullable=False)
     ProductID = db.Column(db.Integer, db.ForeignKey('products.ProductID'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
-   
-    # 使用 ForeignKey 參考 Register 和 Product 模型
+    ShippingFee = db.Column(db.DECIMAL(10, 2), nullable=False)  # 新增運費欄位
+    
     member = db.relationship('Register', backref=db.backref('cart_items', lazy=True))
     product = db.relationship('Product', backref=db.backref('cart_items', lazy=True))
+    
     def __repr__(self):
         return f'<CartItem {self.ProductID} for Member {self.MemberID}>'
-   
+    
     def to_dict(self):
         return {
             'id': self.id,
             'product_id': self.ProductID,
             'quantity': self.quantity,
-            'price': str(self.product.Price)  # JSON 不支持 Decimal，需轉換為字串
+            'price': str(self.product.Price),  # JSON 不支持 Decimal，需轉換為字串
+            'shipping_fee': str(self.ShippingFee)  # 新增的運費欄位
         }
 
 class LineUser(db.Model):
