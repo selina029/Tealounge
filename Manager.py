@@ -90,8 +90,8 @@ mail = Mail(app)
 
 
 line_bot_api = LineBotApi('H0w3AhYjt6ddSSTd4U5tkUGw9+PZLWjgtfFO2MkKOPEBLqXkcXbznehoZpCKrvJwtNEN51JV+nZZMtU2f9CosITrmHQlkFsKAnKG6pO3rCDAEv9fhJv1CXG+EIo+Ih1K9fb/KHAAW5spLiwK5qJLKwdB04t89/1O/w1cDnyilFU=')  
-handler = WebhookHandler('7212f26dd1e65d5b598795969ba458bb')
-parser = WebhookParser('7212f26dd1e65d5b598795969ba458bb')  # 初始化 parser
+handler = WebhookHandler('fe4f92453ffda5592e6a2b4151fb7859')
+parser = WebhookParser('fe4f92453ffda5592e6a2b4151fb7859')  # 初始化 parser
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 Session = sessionmaker(bind=engine)
