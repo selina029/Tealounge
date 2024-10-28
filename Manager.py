@@ -861,7 +861,7 @@ def update_product(product_id):
         flash('沒有任何變更需要更新', 'info')
     
     return redirect(url_for('product_edit', product_id=product_id))
-
+    
 @app.route('/upload_image/<int:product_id>', methods=['POST'])
 def upload_image(product_id):
     # 查詢產品
@@ -881,30 +881,21 @@ def upload_image(product_id):
         return redirect(url_for('product_edit', product_id=product_id))
     
     try:
-        # 上傳檔案到 GitHub
-        github_upload_success = upload_image_to_github(
-            repo_owner="selina029",               # 替換為你的 GitHub 用戶名
-            repo_name="Tealounge",                      # 替換為你的儲存庫名稱
-            file=image,
-            commit_message=f"Upload image for product {product_id}",
-            github_token="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"  # 替換為你的 GitHub 個人存取令牌
-        )
+        filename = secure_filename(image.filename)
+        image_path = os.path.join('static/uploads/', filename)
+        image.save(image_path)
         
-        if github_upload_success:
-            # 創建新的圖片記錄，存儲 GitHub 上的圖片路徑
-            image_filename = secure_filename(image.filename)
-            new_image = ProductImage(ProductID=product.ProductID, ImagePath=image_filename)  # 假設 ImagePath 存的是文件名
-            db.session.add(new_image)
-            db.session.commit()
-            flash('圖片上傳成功', 'success')
-        else:
-            flash('上傳圖片到 GitHub 失敗', 'error')
+        # 創建新的圖片記錄
+        new_image = ProductImage(ProductID=product.ProductID, ImagePath=filename)
+        db.session.add(new_image)
+        db.session.commit()
+        
+        flash('圖片上傳成功', 'success')
     except Exception as e:
         db.session.rollback()
         flash(f'上傳圖片時發生錯誤: {str(e)}', 'error')
     
     return redirect(url_for('product_edit', product_id=product_id))
-
 
 @app.route('/products/toggle_status/<int:product_id>', methods=['POST'])
 def toggle_status(product_id):
