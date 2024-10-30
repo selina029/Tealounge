@@ -248,5 +248,3 @@ class LineUser(db.Model):
     joined_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     register = db.relationship('Register', backref='line_user', lazy=True)
-model.py
-目前顯示的是「model.py」。
