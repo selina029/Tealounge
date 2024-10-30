@@ -224,7 +224,6 @@ class CartItem(db.Model):
     MemberID = db.Column(db.Integer, db.ForeignKey('register.MemberID'), nullable=False)
     ProductID = db.Column(db.Integer, db.ForeignKey('products.ProductID'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
-    ShippingFee = db.Column(db.DECIMAL(10, 2), nullable=False)  # 新增運費欄位
     
     member = db.relationship('Register', backref=db.backref('cart_items', lazy=True))
     product = db.relationship('Product', backref=db.backref('cart_items', lazy=True))
