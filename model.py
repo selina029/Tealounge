@@ -1,12 +1,3 @@
-已開啟會話群組。1 封已讀郵件。
-
-移至內容
-透過螢幕閱讀器使用 Gmail
-會話群組
-你已使用 15 GB 配額中的 12.55 GB (83%)
-條款 · 隱私權 · 計劃政策
-上次帳戶活動時間：20 分鐘前
-詳細資料
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text, Boolean
