@@ -156,7 +156,7 @@ def send_reset_email(user):
 def send_order_email(order, order_details):
     msg = Message('新訂單通知',
                   sender=app.config['MAIL_DEFAULT_SENDER'],
-                  recipients=['tealoungebarnew@gmail.com'])
+                  recipients=['tea.lounge9103@gmail.com'])
     # 渲染 HTML 模板為 email 正文
     html_body = render_template('orderDeatil_email.html', order=order, order_details=order_details)
     
