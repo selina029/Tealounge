@@ -71,8 +71,8 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # 使用 Gmail 的 SMTP 伺服器
 app.config['MAIL_PORT'] = 587  # 使用 Gmail 的 SMTP 端口
 app.config['MAIL_USE_TLS'] = True  # Gmail 支持 TLS 加密
-app.config['MAIL_USERNAME'] = 'tealoungebarnew@gmail.com'  # 你的 Gmail 帳號
-app.config['MAIL_PASSWORD'] = 'exmi itpa uoeq kcut'  # 你的 Gmail 密碼
+app.config['MAIL_USERNAME'] = 'tea.lounge9103@gmail.com'  # 你的 Gmail 帳號
+app.config['MAIL_PASSWORD'] = 'djon lhcc drok nkty'  # 你的 Gmail 密碼
 app.config['MAIL_DEFAULT_SENDER'] = 'noreply@gmail.com'  # 默認的發件人地址
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'a_random_string_that_is_hard_to_guess')  # 設定 secret_key
 
