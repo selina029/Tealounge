@@ -64,7 +64,7 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:AWMHp9gGEF8zMMq239xzMk4uG5wb1jJ2@dpg-csaitb3qf0us739v24q0-a.singapore-postgres.render.com/tea_lounge_ld58'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:eUti0UuX7YuAltWZDat8CJnSKoAfTwmn@dpg-csq49f3qf0us73eavv10-a.singapore-postgres.render.com/tealounge1113'
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'  # 上傳檔案的目錄
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_ECHO'] = True
